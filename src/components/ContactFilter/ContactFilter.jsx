@@ -18,7 +18,7 @@ const ContactFilter = ({ filter, onChange }) => {
 
 export default ContactFilter;
 
-// ContactFilter.propTypes = {
-//   options: PropTypes.array.isRequired,
-//   handleClick: PropTypes.func.isRequired,
-// };
+ContactFilter.propTypes = {
+  filter: PropTypes.string.isRequired,
+  onChange: PropTypes.func.isRequired,
+};

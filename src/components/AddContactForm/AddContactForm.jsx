@@ -1,4 +1,3 @@
-import PropTypes from 'prop-types';
 import styles from './AddContactForm.module.css';
 import { Component } from 'react';
 
@@ -65,8 +64,3 @@ class AddContactForm extends Component {
 }
 
 export default AddContactForm;
-
-// AddContactForm.propTypes = {
-//   options: PropTypes.array.isRequired,
-//   handleClick: PropTypes.func.isRequired,
-// };
