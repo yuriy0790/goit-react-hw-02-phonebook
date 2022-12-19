@@ -1,51 +1,89 @@
 import { Component } from 'react';
-
+import Notiflix from 'notiflix';
 import { GlobalStyleComponent } from 'styles/GlobalStyles';
-import FeedbackOptions from './FeedbackOptions/FeedbackOptions';
-import Statistics from './Statistics/Statistics';
+import AddContactForm from './AddContactForm/AddContactForm';
+import ContactFilter from './ContactFilter/ContactFilter';
+import ContactList from './ContactList/ContactList';
 import Section from './Section/Section';
 import Notification from './Notification/Notification';
 import { Container } from './Container/Container.styled';
 
 export default class App extends Component {
   state = {
-    good: 0,
-    neutral: 0,
-    bad: 0,
+    contacts: [
+      { id: 'id-1', name: 'Rosie Simpson', number: '459-12-56' },
+      { id: 'id-2', name: 'Hermione Kline', number: '443-89-12' },
+      { id: 'id-3', name: 'Eden Clements', number: '645-17-79' },
+      { id: 'id-4', name: 'Annie Copeland', number: '227-91-26' },
+    ],
+    filter: '',
   };
 
-  countTotalFeedback = () => {
-    const { good, neutral, bad } = this.state;
-    return good + neutral + bad;
+  countTotalContacts = () => {
+    const { contacts } = this.state;
+    return contacts.length;
   };
 
-  countPositiveFeedbackPercentage = () => {
-    const { good } = this.state;
-    return Math.round((good / this.countTotalFeedback()) * 100);
-  };
-
-  feedbackButtonClick = opt => {
+  deleteContact = contactId => {
     this.setState(prevState => ({
-      [opt]: prevState[opt] + 1,
+      contacts: prevState.contacts.filter(el => {
+        if (el.id === contactId) {
+          Notiflix.Notify.success(`"${el.name}" successfully deleted`);
+        }
+        return el.id !== contactId;
+      }),
     }));
   };
 
+  formSubmitHandler = data => {
+    if (
+      this.state.contacts.find(
+        el => el.name.toLowerCase() === data.name.toLowerCase()
+      )
+    ) {
+      Notiflix.Notify.failure(`"${data.name}" allready in contact list`);
+      return;
+    }
+
+    const contact = {
+      id: data.number,
+      name: data.name,
+      number: data.number,
+    };
+
+    this.setState(prevState => ({
+      contacts: [contact, ...prevState.contacts],
+    }));
+    Notiflix.Notify.success(
+      `"${contact.name}" successfully added to contact list`
+    );
+  };
+
+  changeFilter = event => {
+    this.setState({ filter: event.currentTarget.value });
+  };
+
   render() {
-    const total = this.countTotalFeedback();
-    const positive = this.countPositiveFeedbackPercentage();
+    const { contacts, filter } = this.state;
+    const normalizedFilter = filter.toLowerCase();
+    const filteredContacts = contacts.filter(contact =>
+      contact.name.toLowerCase().includes(normalizedFilter)
+    );
+
     return (
       <Container>
-        <Section title="Please leave feedback">
-          <FeedbackOptions
-            options={Object.keys(this.state)}
-            handleClick={this.feedbackButtonClick}
-          />
+        <Section title="Phonebook">
+          <AddContactForm onSubmit={this.formSubmitHandler} />
+          <ContactFilter filter={filter} onChange={this.changeFilter} />
         </Section>
-        <Section title="Statistics">
-          {this.countTotalFeedback() ? (
-            <Statistics count={this.state} total={total} positive={positive} />
+        <Section title="Contacts">
+          {this.countTotalContacts() ? (
+            <ContactList
+              contacts={filteredContacts}
+              onDeleteContact={this.deleteContact}
+            />
           ) : (
-            <Notification message="There is no feedback" />
+            <Notification message="There is no contacts" />
           )}
         </Section>
 
