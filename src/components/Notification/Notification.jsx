@@ -9,7 +9,9 @@ const Notification = ({ message }) => {
         fontWeight: 700,
         backgroundColor: '#ffffff',
         display: 'inline-block',
-        padding: 5,
+        padding: 7,
+        borderColor: 'white',
+        borderRadius: 10,
       }}
     >
       {message}
