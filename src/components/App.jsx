@@ -39,12 +39,11 @@ export default class App extends Component {
   };
 
   formSubmitHandler = data => {
-    if (
-      this.state.contacts.find(
-        el => el.name.toLowerCase() === data.name.toLowerCase()
-      )
-    ) {
-      Notiflix.Notify.failure(`"${data.name}" allready in contact list`);
+    const { contacts } = this.state;
+    const { name } = data.name;
+
+    if (contacts.find(el => el.name.toLowerCase() === name.toLowerCase())) {
+      Notiflix.Notify.failure(`"${name}" allready in contact list`);
       return;
     }
 
