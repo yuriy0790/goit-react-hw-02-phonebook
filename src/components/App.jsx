@@ -42,7 +42,11 @@ export default class App extends Component {
     const { contacts } = this.state;
     const { name } = data;
 
-    if (contacts.find(el => el.name.toLowerCase() === name.toLowerCase())) {
+    const existingName = contacts.find(
+      el => el.name.toLowerCase() === name.toLowerCase()
+    );
+
+    if (existingName) {
       Notiflix.Notify.failure(`"${name}" allready in contact list`);
       return;
     }
