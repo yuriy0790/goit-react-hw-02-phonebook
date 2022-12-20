@@ -18,6 +18,7 @@ const Notification = ({ message }) => {
     </p>
   );
 };
+
 export default Notification;
 
 Notification.propTypes = {
