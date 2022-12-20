@@ -25,13 +25,16 @@ export default class App extends Component {
   };
 
   deleteContact = contactId => {
+    const { contacts } = this.state;
+
+    for (const contact of contacts) {
+      if (contact.id === contactId) {
+        Notiflix.Notify.success(`"${contact.name}" successfully deleted`);
+      }
+    }
+
     this.setState(prevState => ({
-      contacts: prevState.contacts.filter(el => {
-        if (el.id === contactId) {
-          Notiflix.Notify.success(`"${el.name}" successfully deleted`);
-        }
-        return el.id !== contactId;
-      }),
+      contacts: prevState.contacts.filter(el => el.id !== contactId),
     }));
   };
 
